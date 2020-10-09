@@ -18,12 +18,17 @@ rdb := rdb.NewClient(&rdb.Options{...})
 rdb.AddHook(redisext.OpenTelemetryHook{})
 ```
 
-For Redis Cluster or Ring use:
+For Redis Cluster and Ring use:
 
 ```go
-rdb.ForEachShard(func(shard *redis.Client) error {
-    shard.AddHook(redisext.OpenTelemetryHook{})
-    return nil
+rdb := redis.NewCluster(&redis.ClusterOptions{
+    // ...
+
+    NewClient: func(opt *redis.Options) *redis.Client {
+        node := redis.NewClient(opt)
+        node.AddHook(redisext.OpenTelemetryHook{})
+        return node
+    },
 })
 ```
 
