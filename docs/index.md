@@ -4,6 +4,8 @@ template: main.html
 
 # Getting started
 
+## Installation
+
 go-redis supports 2 last Go versions and requires a Go version with
 [modules](https://github.com/golang/go/wiki/Modules) support. So make sure to initialize a Go
 module:
@@ -17,6 +19,8 @@ And then install go-redis (note _v8_ in the import; omitting it is a popular mis
 ```shell
 go get github.com/go-redis/redis/v8
 ```
+
+## Connecting to Redis Server
 
 To connect to a Redis database:
 
@@ -41,6 +45,8 @@ if err != nil {
 rdb := redis.NewClient(opt)
 ```
 
+## Executing commands
+
 To execute a command:
 
 ```go
@@ -55,7 +61,7 @@ if err != nil {
 fmt.Println(val)
 ```
 
-Alternatively you can access `val` and `err` separately:
+Alternatively you can access a value and an error separately:
 
 ```go
 get := rdb.Get(ctx, "key")
@@ -67,20 +73,6 @@ if err := get.Err(); err != nil {
     panic(err)
 }
 fmt.Println(get.Val())
-```
-
-To execute arbitrary/custom command:
-
-```go
-get := rdb.Do(ctx, "get", "key")
-if err := get.Err(); err != nil {
-    if err == redis.Nil {
-        fmt.Println("key does not exists")
-        return
-    }
-    panic(err)
-}
-fmt.Println(get.Val().(string))
 ```
 
 When appropriate commands provide helper methods:
@@ -100,6 +92,22 @@ num, err := get.Float32()
 num, err := get.Float64()
 
 flag, err := get.Bool()
+```
+
+## Executing unsupported commands
+
+To execute arbitrary/custom command:
+
+```go
+val, err := rdb.Do(ctx, "get", "key").Result()
+if err != nil {
+    if err == redis.Nil {
+        fmt.Println("key does not exists")
+        return
+    }
+    panic(err)
+}
+fmt.Println(val.(string))
 ```
 
 ## Pipelining
@@ -140,7 +148,7 @@ fmt.Println(incr.Val())
 
 To wrap commands with `multi` and `exec` commands, use `TxPipelined` / `TxPipeline`.
 
-## Watch
+## Transactions and Watch
 
 To watch for changes in keys and commit a transaction only if keys remain unchanged:
 
@@ -188,7 +196,8 @@ increment := func(key string) error {
 
 ## PubSub
 
-go-redis allows to publish messages and subscribe to channels. It automatically handles reconnects.
+go-redis allows to publish messages and subscribe to channels. It also automatically handles
+reconnects.
 
 To publish a message:
 
@@ -219,7 +228,7 @@ for {
 }
 ```
 
-Or using a Go channel:
+But the simplest way is using a Go channel:
 
 ```go
 ch := pubsub.Channel()

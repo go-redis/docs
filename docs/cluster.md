@@ -31,7 +31,7 @@ if err != nil {
 
 To iterate over master nodes, use `ForEachMaster`. To iterate over slave nodes, use `ForEachSlave`.
 
-To change options for a specific shard:
+To change options for some shard:
 
 ```go
 rdb := redis.NewClusterClient(&redis.ClusterOptions{
