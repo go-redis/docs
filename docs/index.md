@@ -6,15 +6,14 @@ template: main.html
 
 ## Installation
 
-go-redis supports 2 last Go versions and requires a Go version with
-[modules](https://github.com/golang/go/wiki/Modules) support. So make sure to initialize a Go
-module:
+go-redis supports 2 last Go versions and requires support for
+[Go modules](https://github.com/golang/go/wiki/Modules). So make sure to initialize a Go module:
 
 ```shell
 go mod init github.com/my/repo
 ```
 
-And then install go-redis (note _v8_ in the import; omitting it is a popular mistake):
+And then install redis/v8 (note _v8_ in the import; omitting it is a popular mistake):
 
 ```shell
 go get github.com/go-redis/redis/v8
