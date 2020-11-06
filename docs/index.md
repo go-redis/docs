@@ -7,7 +7,8 @@ template: main.html
 ## Installation
 
 go-redis supports 2 last Go versions and requires support for
-[Go modules](https://github.com/golang/go/wiki/Modules). So make sure to initialize a Go module:
+[Go modules](https://github.com/golang/go/wiki/Modules){target=\_blank}. So make sure to initialize
+a Go module:
 
 ```shell
 go mod init github.com/my/repo

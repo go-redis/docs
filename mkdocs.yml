@@ -9,6 +9,7 @@ nav:
   - sentinel.md
   - ring.md
   - tracing.md
+  - changelog.md
 
 extra_css:
   - css/index.css

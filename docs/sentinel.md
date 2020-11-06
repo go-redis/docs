@@ -4,6 +4,8 @@ template: main.html
 
 # Redis Sentinel
 
+## Redis Server client
+
 To connect to a Redis Server managed by a [Redis Sentinel](https://redis.io/topics/sentinel):
 
 ```go
@@ -30,6 +32,8 @@ rdb := redis.NewFailoverClusterClient(&redis.FailoverOptions{
     //RouteRandomly: true,
 })
 ```
+
+## Redis Sentinel client
 
 To connect to a Redis Sentinel itself:
 
