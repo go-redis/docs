@@ -45,34 +45,40 @@ if err != nil {
 rdb := redis.NewClient(opt)
 ```
 
+## redis.Nil
+
+go-redis exports the `redis.Nil` error and returns it whenever Redis Server responds with `(nil)`.
+We have to use an error to distinguish between an empty string reply and a nil reply:
+
+```go
+val, err := rdb.Get(ctx, "key").Result()
+switch {
+case err == redis.Nil:
+    fmt.Println("key does not exist")
+case err != nil:
+    fmt.Println("Get failed", err)
+case val == "":
+    fmt.Println("value is empty")
+}
+```
+
+You must be aware that `GET` is not the only command that returns `redis.Nil`. For example, `BLPOP`
+and `ZSCORE` also return `redis.Nil`.
+
 ## Executing commands
 
 To execute a command:
 
 ```go
 val, err := rdb.Get(ctx, "key").Result()
-if err != nil {
-    if err == redis.Nil {
-        fmt.Println("key does not exists")
-        return
-    }
-    panic(err)
-}
 fmt.Println(val)
 ```
 
-Alternatively you can access a value and an error separately:
+Alternatively you can save the command and access the value and the error separately:
 
 ```go
 get := rdb.Get(ctx, "key")
-if err := get.Err(); err != nil {
-    if err == redis.Nil {
-        fmt.Println("key does not exists")
-        return
-    }
-    panic(err)
-}
-fmt.Println(get.Val())
+fmt.Println(get.Val(), get.Err())
 ```
 
 When appropriate commands provide helper methods:
@@ -193,6 +199,8 @@ increment := func(key string) error {
     return errors.New("increment reached maximum number of retries")
 }
 ```
+
+Note how we use `redis.TxFailedErr` to check if a transaction has failed or not.
 
 ## PubSub
 
