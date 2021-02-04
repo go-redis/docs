@@ -1,8 +1,20 @@
 # Changelog
 
-## v8
+## v8.5
 
-- Documentation at https://redis.uptrace.dev/
+- [knadh](https://github.com/knadh) contributed long-awaited ability to scan Redis Hash into a
+  struct:
+
+```go
+err := rdb.HGetAll(ctx, "hash").Scan(&data)
+
+err := rdb.MGet(ctx, "key1", "key2").Scan(&data)
+```
+
+- Please check [redismock](https://github.com/go-redis/redismock) by
+  [monkey92t](https://github.com/monkey92t) if you are looking for mocking Redis Client.
+
+## v8
 
 - All commands require `context.Context` as a first argument, e.g. `rdb.Ping(ctx)`. If you are not
   using `context.Context` yet, the simplest option is to define global package variable
