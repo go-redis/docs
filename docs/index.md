@@ -2,7 +2,7 @@
 template: main.html
 ---
 
-# Getting started
+# Redis client
 
 ## Installation
 
@@ -37,7 +37,7 @@ rdb := redis.NewClient(&redis.Options{
 Another popular way is using a connection string:
 
 ```go
-opt, err := redis.ParseURL("redis://localhost:6379/<db>")
+opt, err := redis.ParseURL("redis://<user>:<pass>@localhost:6379/<db>")
 if err != nil {
     panic(err)
 }
@@ -118,7 +118,7 @@ fmt.Println(val.(string))
 
 ## Pipelining
 
-To execute several commands in a single write/read pipeline:
+To execute multiple commands in a single write/read pipeline:
 
 ```go
 var incr *redis.IntCmd
@@ -156,7 +156,8 @@ To wrap commands with `multi` and `exec` commands, use `TxPipelined` / `TxPipeli
 
 ## Transactions and Watch
 
-To watch for changes in keys and commit a transaction only if keys remain unchanged:
+To watch for changes in keys and commit a transaction only if keys remain unchanged. Note how we use
+`redis.TxFailedErr` to check if a transaction has failed or not.
 
 ```go
 const maxRetries = 1000
@@ -199,8 +200,6 @@ increment := func(key string) error {
     return errors.New("increment reached maximum number of retries")
 }
 ```
-
-Note how we use `redis.TxFailedErr` to check if a transaction has failed or not.
 
 ## PubSub
 

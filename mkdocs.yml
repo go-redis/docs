@@ -4,12 +4,16 @@ repo_url: https://github.com/go-redis/redis
 edit_uri: https://github.com/go-redis/docs/edit/master/docs/
 
 nav:
-  - index.md
-  - cluster.md
-  - sentinel.md
-  - ring.md
-  - tracing.md
-  - changelog.md
+  - 'Redis client for Go':
+      - index.md
+      - cluster.md
+      - sentinel.md
+      - ring.md
+      - tracing.md
+      - changelog.md
+
+  - 'Tutorials':
+      - get-all-keys.md
 
 extra_css:
   - css/index.css
@@ -23,6 +27,9 @@ plugins:
 theme:
   name: material
   custom_dir: overrides
+  features:
+    - navigation.sections
+    - navigation.expand
 
 markdown_extensions:
   - admonition
@@ -51,3 +58,4 @@ markdown_extensions:
   - pymdownx.tilde
   - pymdownx.snippets:
       base_path: docs
+  - attr_list

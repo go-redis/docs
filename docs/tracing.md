@@ -18,7 +18,7 @@ rdb := rdb.NewClient(&rdb.Options{...})
 rdb.AddHook(redisotel.TracingHook{})
 ```
 
-For Redis Cluster and Ring use:
+For Redis Cluster and Ring you should instrument each node separately:
 
 ```go
 rdb := redis.NewClusterClient(&redis.ClusterOptions{
@@ -35,6 +35,6 @@ rdb.AddHook(redisotel.TracingHook{})
 ```
 
 This is how a span looks at Uptrace.dev which is an OpenTelemetry backend that supports
-[distributed traces, logs, and errors](https://uptrace.dev/1/groups?system=db%3Aredis).
+[distributed traces, logs, and errors](https://uptrace.dev/explore/1/groups/?system=db%3Aredis&utm_source=redis&utm_campaign=redis-tracing).
 
 ![Redis trace and spans](img/redis-span.png)
