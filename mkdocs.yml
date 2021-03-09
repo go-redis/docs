@@ -14,6 +14,7 @@ nav:
 
   - 'Tutorials':
       - get-all-keys.md
+      - rate-limiting.md
 
 extra_css:
   - css/index.css
