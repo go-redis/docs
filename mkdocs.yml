@@ -9,12 +9,13 @@ nav:
       - cluster.md
       - sentinel.md
       - ring.md
-      - tracing.md
       - changelog.md
 
   - 'Tutorials':
-      - get-all-keys.md
+      - tracing.md
+      - 'Caching': caching.md
       - rate-limiting.md
+      - get-all-keys.md
 
 extra_css:
   - css/index.css

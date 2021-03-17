@@ -1,15 +1,14 @@
 # Rate limiting
 
-For rate-limiting we will be using [redis_rate](https://github.com/go-redis/redis_rate) library
-which implements a leaky bucket-type scheduling algorithm (AKA generic cell rate algorithm). You
-install it with:
+[go-redis/redis_rate](https://github.com/go-redis/redis_rate) library implements a leaky bucket-type
+scheduling algorithm (AKA generic cell rate algorithm). You can install it with:
 
 ```shell
 go get github.com/go-redis/redis_rate/v9
 ```
 
-redis_rate accepts an interface to communicate with Redis and supports the same Redis flavors that
-go-redis supports.
+redis_rate accepts an interface to communicate with Redis and thus supports all types of Redis
+clients that go-redis provides.
 
 ```go
 rdb := redis.NewClient(&redis.Options{
@@ -27,8 +26,8 @@ fmt.Println("allowed", res.Allowed, "remaining", res.Remaining)
 ```
 
 The following example demonstrates how to use redis_rate in a
-[treemux](https://github.com/vmihailenco/treemux/tree/master/example/rate-limiting) middleware to
-rate limit an HTTP API:
+[treemux](https://github.com/vmihailenco/treemux/tree/master/example/rate-limiting) middleware for
+HTTP rate limiting:
 
 ```go
 func rateLimit(next treemux.HandlerFunc) treemux.HandlerFunc {
