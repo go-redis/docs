@@ -7,9 +7,9 @@ cluster-specific applications locally or having different clients in different e
 `NewUniversalClient` returns a new multi client. The type of the returned client depends on the
 following conditions:
 
-1.  If the MasterName option is specified, a sentinel-backed FailoverClient is returned.
-2.  if the number of Addrs is two or more, a ClusterClient is returned.
-3.  Otherwise, a single-node Redis Client is returned.
+1.  If the `MasterName` option is specified, a sentinel-backed `FailoverClient` is returned.
+2.  if the number of `Addrs` is two or more, a `ClusterClient` is returned.
+3.  Otherwise, a single-node `Client` is returned.
 
 For example:
 
