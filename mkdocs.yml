@@ -9,6 +9,7 @@ nav:
       - cluster.md
       - sentinel.md
       - ring.md
+      - universal.md
       - changelog.md
 
   - 'Tutorials':

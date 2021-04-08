@@ -4,6 +4,8 @@ template: main.html
 
 # Redis Ring
 
+## Introduction
+
 Ring is a Redis client that uses consistent hashing to distribute keys across multiple Redis servers
 (shards). It's safe for concurrent use by multiple goroutines.
 
@@ -13,7 +15,9 @@ but no consistency between different shards or even clients. Each client uses sh
 available to the client and does not do any coordination when shard state is changed.
 
 Ring should be used when you need multiple Redis servers for caching and can tolerate losing data
-when one of the servers dies. Otherwise you should use Redis Cluster.
+when one of the servers dies. Otherwise you should use Redis Cluster or Redis Server.
+
+## Quickstart
 
 To create a Ring cluster that consists of 3 shards:
 
@@ -29,6 +33,14 @@ rdb := redis.NewRing(&redis.RingOptions{
 })
 ```
 
+Then the client can be used as usually:
+
+```go
+if err := rdb.Set(ctx, "foo", "bar", 0).Err(); err != nil {
+    panic(err)
+}
+```
+
 To iterate over shards:
 
 ```go
@@ -40,7 +52,7 @@ if err != nil {
 }
 ```
 
-To change options for a specific shard:
+To change shard connection options:
 
 ```go
 rdb := redis.NewRing(&redis.RingOptions{
@@ -54,9 +66,12 @@ rdb := redis.NewRing(&redis.RingOptions{
 })
 ```
 
-Ring uses
-[Rendezvous](https://medium.com/@dgryski/consistent-hashing-algorithmic-tradeoffs-ef6b8e2fcae8) to
-distribute keys over shards. To change default consistent hash implementation:
+## Keys distribution
+
+By default Ring uses
+[Rendezvous](https://medium.com/@dgryski/consistent-hashing-algorithmic-tradeoffs-ef6b8e2fcae8) hash
+to distribute keys over multiple shards. But you can change the default consistent hash
+implementation:
 
 ```go
 import "github.com/golang/groupcache/consistenthash"
