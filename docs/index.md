@@ -6,15 +6,15 @@ template: main.html
 
 ## Installation
 
-go-redis supports 2 last Go versions and requires support for
-[Go modules](https://github.com/golang/go/wiki/Modules){target=\_blank}. So make sure to initialize
-a Go module:
+go-redis supports 2 last Go versions and requires
+[Go modules](https://github.com/golang/go/wiki/Modules){target=\_blank} support. So make sure to
+initialize a Go module:
 
 ```shell
 go mod init github.com/my/repo
 ```
 
-And then install redis/v8 (note _v8_ in the import; omitting it is a popular mistake):
+And then install redis/v8 (note _v8_ in the import path; omitting it is a popular mistake):
 
 ```shell
 go get github.com/go-redis/redis/v8
@@ -45,13 +45,24 @@ if err != nil {
 rdb := redis.NewClient(opt)
 ```
 
+To enable SSL, you can specify a `tls.Config`. If you are getting "x509: cannot validate certificate
+for xxx.xxx.xxx.xxx because it doesn't contain any IP SANs", try to set `ServerName` option:
+
+```go
+rdb := redis.NewClient(&redis.Options{
+    TLSConfig: &tls.Config{
+        ServerName: "your.domain.com",
+    },
+})
+```
+
 ## redis.Nil
 
-go-redis exports the `redis.Nil` error and returns it only when Redis Server responds with `(nil)`.
+go-redis exports the `redis.Nil` error and returns it whenever Redis Server responds with `(nil)`.
 You can check with redis-cli what response Redis returns.
 
-In the following example `redis.Nil` is useful to distinguish between an empty string reply and a
-nil reply (key does not exist):
+In the following example we use `redis.Nil` to distinguish an empty string reply and a nil reply
+(key does not exist):
 
 ```go
 val, err := rdb.Get(ctx, "key").Result()
@@ -65,8 +76,8 @@ case val == "":
 }
 ```
 
-You should be aware that `GET` is not the only command that returns `redis.Nil`. For example,
-`BLPOP` and `ZSCORE` also return `redis.Nil`.
+GET is not the only command that returns nil reply. For example, BLPOP and ZSCORE can also return
+it.
 
 ## Executing commands
 
@@ -77,17 +88,17 @@ val, err := rdb.Get(ctx, "key").Result()
 fmt.Println(val)
 ```
 
-Alternatively you can save the command and access the value and the error separately:
+Alternatively you can save the command and later access the value and the error separately:
 
 ```go
 get := rdb.Get(ctx, "key")
 fmt.Println(get.Val(), get.Err())
 ```
 
-When appropriate commands provide helper methods:
+When appropriate, commands provide helper methods:
 
 ```go
-// Shortcut for get.Val().(string) with error handling.
+// Shortcut for get.Val().(string) with proper error handling.
 s, err := get.Text()
 
 num, err := get.Int()
@@ -155,12 +166,15 @@ if err != nil {
 fmt.Println(incr.Val())
 ```
 
-To wrap commands with `multi` and `exec` commands, use `TxPipelined` / `TxPipeline`.
+To wrap commands with MULTI and EXEC commands, use `TxPipelined` / `TxPipeline`.
 
 ## Transactions and Watch
 
-To watch for changes in keys and commit a transaction only if keys remain unchanged. Note how we use
-`redis.TxFailedErr` to check if a transaction has failed or not.
+With Redis [transactions](https://redis.io/topics/transactions) you can watch for changes in keys
+and commit a transaction only if the keys don't change.
+
+In the following example we implement [INCR](https://redis.io/commands/INCR) command using GET, SET,
+and WATCH. Note how we use `redis.TxFailedErr` to check if a transaction has failed or not.
 
 ```go
 const maxRetries = 1000
@@ -223,6 +237,9 @@ To subscribe to a channel:
 ```go
 // There is no error because go-redis automatically reconnects on error.
 pubsub := rdb.Subscribe(ctx, "mychannel1")
+
+// Close the subscription when we are done.
+defer pubsub.Close()
 ```
 
 To receive a message:
@@ -238,7 +255,7 @@ for {
 }
 ```
 
-But the simplest way is using a Go channel:
+But the simplest way is using a Go channel which is closed together with subscription:
 
 ```go
 ch := pubsub.Channel()

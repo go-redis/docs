@@ -1,6 +1,6 @@
 # Get all keys
 
-Redis allows iterating over all keys using the [scan](https://redis.io/commands/scan) command:
+Redis allows iterating over all keys using the [SCAN](https://redis.io/commands/scan) command:
 
 ```go
 var cursor uint64
