@@ -47,8 +47,11 @@ rdb := redis.NewClient(opt)
 
 ## redis.Nil
 
-go-redis exports the `redis.Nil` error and returns it whenever Redis Server responds with `(nil)`.
-We have to use an error to distinguish between an empty string reply and a nil reply:
+go-redis exports the `redis.Nil` error and returns it only when Redis Server responds with `(nil)`.
+You can check with redis-cli what response Redis returns.
+
+In the following example `redis.Nil` is useful to distinguish between an empty string reply and a
+nil reply (key does not exist):
 
 ```go
 val, err := rdb.Get(ctx, "key").Result()
@@ -62,8 +65,8 @@ case val == "":
 }
 ```
 
-You must be aware that `GET` is not the only command that returns `redis.Nil`. For example, `BLPOP`
-and `ZSCORE` also return `redis.Nil`.
+You should be aware that `GET` is not the only command that returns `redis.Nil`. For example,
+`BLPOP` and `ZSCORE` also return `redis.Nil`.
 
 ## Executing commands
 

@@ -10,12 +10,12 @@ enable commands instrumentation, use the following code:
 ```go
 import (
     "github.com/go-redis/redis/v8"
-    "github.com/go-redis/redis/extra/redisotel"
+    "github.com/go-redis/redis/extra/redisotel/v8"
 )
 
-rdb := rdb.NewClient(&rdb.Options{...})
+rdb := redis.NewClient(&redis.Options{...})
 
-rdb.AddHook(redisotel.TracingHook{})
+rdb.AddHook(redisotel.NewTracingHook())
 ```
 
 For Redis Cluster and Ring you should instrument each node separately:
@@ -26,12 +26,12 @@ rdb := redis.NewClusterClient(&redis.ClusterOptions{
 
     NewClient: func(opt *redis.Options) *redis.Client {
         node := redis.NewClient(opt)
-        node.AddHook(redisotel.TracingHook{})
+        node.AddHook(redisotel.NewTracingHook())
         return node
     },
 })
 
-rdb.AddHook(redisotel.TracingHook{})
+rdb.AddHook(redisotel.NewTracingHook())
 ```
 
 This is how a span looks at Uptrace.dev which is an OpenTelemetry backend that supports

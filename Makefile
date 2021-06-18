@@ -5,3 +5,6 @@ misspell:
 
 lint:
 	yarn lint:wording
+
+serve:
+	mkdocs serve

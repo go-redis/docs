@@ -10,7 +10,6 @@ nav:
       - sentinel.md
       - ring.md
       - universal.md
-      - changelog.md
 
   - 'Tutorials':
       - tracing.md
